@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const { findById } = require('../models/user')
 const router = new express.Router()
 
 router.post('/users', async (req, res) => {
@@ -55,12 +56,16 @@ router.patch('/users/:id', async (req, res) => {
     }
 
     try {
-        const user = await User.findByIdAndUpdate(_id, req.body, {new: true, runValidators: true})
-        
+        const user = await User.findById(_id)
+
         if(!user){
             return res.status(404).send()
         }
-        
+
+        updates.forEach((update) => user[update] = req.body[update])
+
+        await user.save()
+    
         res.send(user)
     }catch (e) {
         res.status(500).send(e)
@@ -83,15 +88,15 @@ router.delete('/users/:id', async (req, res) => {
     }
 })
 
-router.post('/tasks', async (req, res) => {
-    const task = new Task(req.body)
-
+router.post('/users/login', async (req, res) => {
     try {
-        await task.save()
-        res.status(201).send(task)
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+
+        res.send(user)
     } catch (e) {
-        res.status(500).send(e)
+        res.status(400).send(e)
     }
 })
+
 
 module.exports = router
