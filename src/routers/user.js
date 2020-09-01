@@ -1,6 +1,7 @@
 const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const {success, message, error} = require('../utilities/colors')
 const multer = require('multer')
 const sharp = require('sharp')
 const {sendWelcomeEmail, sendCancelationEMail} = require('../emails/account')
@@ -14,8 +15,12 @@ router.post('/users', async (req, res) => {
         sendWelcomeEmail(user.email, user.name)
         const token = await user.generateAuthToken()
         res.status(201).send({token, user})
+
+        console.log(success(201), message('the user was succesfully created!'))
     }catch(e) {
         res.status(400).send(e)
+
+        console.log(error(400), message(e))
     }
 })
 
@@ -25,8 +30,11 @@ router.post('/users/login', async (req, res) => {
         const token = await user.generateAuthToken()
 
         res.send({token, user})
+
+        console.log(success(200), message('login succesfully!'))
     } catch (e) {
         res.status(400).send(e)
+        console.log(error(400), message(e))
     }
 })
 
@@ -37,8 +45,10 @@ router.post('/users/logout', auth, async (req, res) => {
         await req.user.save()
 
         res.send()
+        console.log(success(200), message('logout succesfully!'))
     } catch (e) {
         res.status(500).send(e)
+        console.log(error(500), message(e))
     }
 })
 
@@ -49,8 +59,11 @@ router.post('/users/logoutAll', auth, async(req, res) => {
         await req.user.save()
 
         res.send()
+
+        console.log(success(200), message('logout all succesfully!'))
     } catch (e) {
         res.status(500).send(e)
+        console.log(error(500), message(e))
     }
 })
 
@@ -64,6 +77,8 @@ router.patch('/users/me', auth, async (req, res) => {
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
+        console.log(error(400), message('Invalid updates!'))
+
         return res.status(400).send({ error: 'Invalid updates!'})
     }
 
@@ -73,8 +88,10 @@ router.patch('/users/me', auth, async (req, res) => {
         await req.user.save()
     
         res.send(req.user)
+        console.log(success(200), message('user profile consulted successfully!'))
     }catch (e) {
         res.status(500).send(e)
+        console.log(error(500), message(e))
     }
 })
 
@@ -83,9 +100,13 @@ router.delete('/users/me', auth, async (req, res) => {
     try {
         await req.user.remove()
         sendCancelationEMail(req.user.email, req.user.name)
+
         res.send(req.user)
+
+        console.log(success(200), message('user deleted successfully!'))
     } catch (e) {
         res.status(500).send(e)
+        console.log(error(500), message(e))
     }
 })
 
@@ -107,8 +128,11 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
     req.user.avatar = buffer
     await req.user.save()
     res.send()
+
+    console.log(success(200), message('file uploaded successfully!'))
 }, (error, req, res, next) => {
     res.status(400).send({error: error.message})
+    console.log(error(400), message(error.message))
 })
 
 router.delete('/users/me/avatar', auth, async (req, res) => {
@@ -118,8 +142,11 @@ router.delete('/users/me/avatar', auth, async (req, res) => {
         await req.user.save()
 
         res.send()
+
+        console.log(success(200), message('file deleted successfully!'))
     } catch (e) {
         res.status(500).send()
+        console.log(error(500), message(e))
     }
 })
 
@@ -134,8 +161,11 @@ router.get('/users/:id/avatar', async (req, res) => {
 
         res.set('Content-Type', 'image/png')
         res.send(user.avatar)
+
+        console.log(success(200), message('file consulted successfully!'))
     } catch (e) {
         res.status(404).send()
+        console.log(error(404), message(e))
     }
 })
 
