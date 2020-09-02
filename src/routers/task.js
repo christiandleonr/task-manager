@@ -14,7 +14,7 @@ router.post('/tasks', auth, async (req, res) => {
         await task.save()
         res.status(201).send(task)
 
-        console.log(success(201), message('the task was succesfully created!'))
+        console.log(success(201), route('/tasks'), message('the task was succesfully created!'))
     } catch (e) {
         res.status(500).send(e)
         console.log(error(500), message(e))
@@ -53,10 +53,10 @@ router.get('/tasks', auth, async (req, res) => {
         }
 
         res.send(req.user.tasks)
-        console.log(success(200), message('tasks were consulted successfully!'))
+        console.log(success(200), route(req.method), route(req.path), message('tasks were consulted successfully!'))
     }catch (e) {
         res.send(500).send(e)
-        console.log(error(500), message(e))
+        console.log(error(500), route(req.method), route(req.path), message(e))
     }
 })
 
@@ -71,10 +71,10 @@ router.get('/tasks/:id', auth, async (req, res) => {
         }
 
         res.send(task)
-        console.log(success(200), message('the task was consulted by id successfully!'))
+        console.log(success(200), route(req.method), route(req.path), message('the task was consulted by id successfully!'))
     } catch (e) {
         res.status(500).send()
-        console.log(error(500), message(e))
+        console.log(error(500), route(req.method), route(req.path), message(e))
     }
 })
 
@@ -100,10 +100,10 @@ router.patch('/tasks/:id', auth, async (req, res) => {
         await task.save()
 
         res.send(task)
-        console.log(success(200), message('the task was updated by id successfully!'))
+        console.log(success(200), route(req.method), route(req.path), message('the task was updated by id successfully!'))
     } catch (e) {
         res.status(500).send(e)
-        console.log(error(500), message(e))
+        console.log(error(500), route(req.method), route(req.path), message(e))
     }
 })
 
@@ -118,10 +118,10 @@ router.delete('/tasks/:id', auth, async (req, res) => {
         }
 
         res.send(task)
-        console.log(success(200), message('the task was deleted by id successfully!'))
+        console.log(success(200), route(req.method), route(req.path), message('the task was deleted by id successfully!'))
     } catch (e) {
         res.status(500).send(e)
-        console.log(error(500), message(e))
+        console.log(error(500), route(req.method), route(req.path), message(e))
     }
 })
 
