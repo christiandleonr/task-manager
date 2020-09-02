@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const {error, message} = require('../utilities/colors')
 
 const auth = async (req, res, next) => {
     try {
@@ -16,6 +17,8 @@ const auth = async (req, res, next) => {
         next()
     } catch (e) {
         res.status(401).send({error: 'Please authenticate.'})
+
+        console.log(error(401), message('query made without authentication!'))
     }
 }
 
