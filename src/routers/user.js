@@ -69,6 +69,8 @@ router.post('/users/logoutAll', auth, async(req, res) => {
 
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user)
+
+    console.log(success(200), route(req.method), route(req.path), message('user profile consulted successfully!'))
 })
 
 router.patch('/users/me', auth, async (req, res) => {
@@ -88,7 +90,7 @@ router.patch('/users/me', auth, async (req, res) => {
         await req.user.save()
     
         res.send(req.user)
-        console.log(success(200), route(req.method), route(req.path), message('user profile consulted successfully!'))
+        console.log(success(200), route(req.method), route(req.path), message('user profile updated successfully!'))
     }catch (e) {
         res.status(500).send(e)
         console.log(error(500), route(req.method), route(req.path), message(e))
