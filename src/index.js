@@ -11,4 +11,7 @@ app.use(express.json())
 app.use(userRouter)
 app.use(taskRouter)
 
-https.createServer(app).listen(port)
+https.createServer({
+    key: process.env.KEY,
+    cert: process.env.CERT
+}, app).listen(port)
