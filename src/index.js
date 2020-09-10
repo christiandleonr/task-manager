@@ -5,16 +5,13 @@ const fs = require('fs')
 const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
 
-const credentials = {key:fs.readFileSync(process.env.KEY), cert:fs.readFileSync(process.env.CERT)}
+const credentials = {key:fs.readFileSync(process.env.KEY).toString(), cert:fs.readFileSync(process.env.CERT).toString()}
 const port = process.env.PORT
 
-const app = express.createServer(credentials)
+const app = express()
 
 app.use(express.json())
 app.use(userRouter)
 app.use(taskRouter)
 
-https.createServer({
-    key: fs.readFileSync(process.env.KEY).toString(),
-    cert: fs.readFileSync(process.env.CERT).toString()
-}, app).listen(port)
+https.createServer(credentials, app).listen(port)
