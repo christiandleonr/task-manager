@@ -1,12 +1,14 @@
 require('./db/mongoose')
 const express = require('express')
-const https = require('https')
+const https = require('http')
 const fs = require('fs')
 const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
 
-const app = express()
+const credentials = {key:fs.readFileSync(process.env.KEY), cert:fs.readFileSync(process.env.CERT)}
 const port = process.env.PORT
+
+const app = express.createServer(credentials)
 
 app.use(express.json())
 app.use(userRouter)
@@ -16,3 +18,7 @@ https.createServer({
     key: fs.readFileSync(process.env.KEY),
     cert: fs.readFileSync(process.env.CERT)
 }, app).listen(port)
+
+app.listen(port, ()=>{
+    console.log('Server runing on port:', port)
+})
