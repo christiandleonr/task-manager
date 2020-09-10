@@ -15,10 +15,6 @@ app.use(userRouter)
 app.use(taskRouter)
 
 https.createServer({
-    key: fs.readFileSync(process.env.KEY),
-    cert: fs.readFileSync(process.env.CERT)
+    key: fs.readFileSync(process.env.KEY).toString(),
+    cert: fs.readFileSync(process.env.CERT).toString()
 }, app).listen(port)
-
-app.listen(port, ()=>{
-    console.log('Server runing on port:', port)
-})
