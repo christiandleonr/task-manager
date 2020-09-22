@@ -78,5 +78,5 @@ test('Not delete account for user', async () => {
     await request(app)
         .delete('/users/me')
         .send()
-        .expect(500)
+        .expect(401)
 })
