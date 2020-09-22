@@ -1,4 +1,3 @@
-const { TestScheduler } = require('jest')
 const {calculateTip, fahrenheitToCelsius, celsiusToFahrenheit, add} = require('../src/math')
 
 test('Calculate total with tip', () => {
