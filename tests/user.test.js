@@ -34,3 +34,13 @@ test('Login existing user', async () => {
         })
         .expect(200)
 })
+
+test('Not login nonexistent user', async () => {
+    await request(app)
+        .post('/users/login')
+        .send({
+            email: 'perroque@example.com',
+            password: 'nomuerde'
+        })
+        .expect(400)
+})
