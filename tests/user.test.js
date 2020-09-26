@@ -32,7 +32,7 @@ test('Signup a new user', async () => {
 
     // Assert that the database was changer correctly
 
-    const user = await User.findById(response.body.user._id)
+    const user = await User.find({name: response.body.user.name})
 
     expect(user).not.toBeNull()
 
