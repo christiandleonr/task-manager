@@ -43,7 +43,7 @@ test('Signup a new user', async () => {
             name: 'Christian Ramirez',
             email: 'christianradele12@gmail.com',
         },
-        token: user.tokens[0].token
+        token: response.body.token
     })
 })
 
